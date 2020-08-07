@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './GoodCategorySelect.css';
 
-const GoodCategory = (props) => {
+
+const GoodCategorySelect = (props) => {
     const {goodsCategory, onInputChange} = props;
     return (
-        <select>
+        <select className="GoodCategorySelect">
+            <option>Choose a category</option>
             {
                 goodsCategory.map(({id, name}) => {
                     return (
@@ -22,9 +25,9 @@ const GoodCategory = (props) => {
     );
 };
 
-export default GoodCategory;
+export default GoodCategorySelect;
 
-GoodCategory.propTypes = {
+GoodCategorySelect.propTypes = {
     goodsCategory: PropTypes.array,
     onInputChange: PropTypes.func,
 };
