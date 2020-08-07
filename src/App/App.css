@@ -1,17 +1,78 @@
 .Container {
-  text-align: center;
+    text-align: center;
+}
+
+.AppWrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.TotalWrapper {
+    width: 40%;
 }
 .Title {
-  background-color: aquamarine;
-  width: 100%;
-  text-align: center;
-  font-size: 24px;
-  padding: 10px;
+    background-color: lightblue;
+    color: white;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 10px;
 }
+
 .Total {
-  border-bottom: 0.5px solid black;
-  margin: 0 10px 0 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 5px;
+    border: 0.5px solid black;
+    padding: 0 10px;
+    margin: 20px;
 }
+
+.TotalNumber {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.AppButtonWrapper {
+    margin-left: 10px;
+}
+
+.button {
+    display: inline-block;
+    vertical-align: baseline;
+    font-size: 14px;
+    font-weight: bolder;
+    line-height: 20px;
+    color: white;
+    text-transform: uppercase;
+    background-color: red;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.AppButton {
+    color: white;
+    background-color: red;
+    padding: 10px 15px;
+}
+
+.AppButton:hover {
+    color: red;
+    background-color: white;
+    border: 2px solid red;
+}
+
+.AppButton:disabled {
+    background-color: rgba(255, 0, 0, 0.6);
+    cursor: default;
+}
+
+.AppButton:disabled:hover {
+    color: white;
+    border: 2px solid transparent;
+    background-color: rgba(255, 0, 0, 0.6);
+}
+
