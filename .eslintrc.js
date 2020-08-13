@@ -24,8 +24,6 @@ module.exports = {
     'indent': ['error', 4],
     'no-invalid-this': 0,
     'babel/no-invalid-this': 1,
-    'max-len': ['warn', {'code': 120}],
-    // custom
-    // 'max-lines': ['warn', {"max": 400, 'skipBlankLines': false, 'skipComments': false}]
+    'max-len': ['warn', {'code': 120}]
   },
 };
