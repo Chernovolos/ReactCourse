@@ -1,48 +1,37 @@
-import React, {Component} from 'react';
+import React from 'react';
 import GoodsListElement from '../GoodsListElement/GoodsListElement';
 import PropTypes from 'prop-types';
 import './GoodsList.css';
 
-export default class GoodsList extends Component {
-    onDelete = (id) => {
-        this.props.onDelete(id);
-    };
+const GoodsList = (props) => {
+    const {goods, selectedGoods, onDelete, onToggle, onEdit, onDeleteSelected} = props;
 
-    onToggle = (id) => {
-        this.props.onToggle(id);
-    };
-
-    onEdit = (updatedGood) => {
-        this.props.onEdit(updatedGood);
-    };
-
-    render() {
-        const {goods, selectedGoods} = this.props;
-        return (
-            <div className="container">
-                <section className="GoodListSection">
-                    <div className="GoodListContainer">
-                        <div className="GoodsListWrapper">
-                            {Array.isArray(goods) && goods.map((good) => {
-                                return (
-                                    <GoodsListElement
-                                        good={good}
-                                        isSelected={selectedGoods.indexOf(good.id) !== -1}
-                                        key={good.id}
-                                        onDelete={this.onDelete}
-                                        onToggle={this.onToggle}
-                                        onEdit={this.onEdit}
-                                        onDeleteSelected={this.onDeleteSelected}
-                                    />
-                                );
-                            })}
-                        </div>
+    return (
+        <div className="container">
+            <section className="GoodListSection">
+                <div className="GoodListContainer">
+                    <div className="GoodsListWrapper">
+                        {Array.isArray(goods) && goods.map((good) => {
+                            return (
+                                <GoodsListElement
+                                    good={good}
+                                    isSelected={selectedGoods.indexOf(good.id) !== -1}
+                                    key={good.id}
+                                    onDelete={onDelete}
+                                    onToggle={onToggle}
+                                    onEdit={onEdit}
+                                    onDeleteSelected={onDeleteSelected}
+                                />
+                            );
+                        })}
                     </div>
-                </section>
-            </div>
-        );
-    }
-}
+                </div>
+            </section>
+        </div>
+    );
+};
+
+export default GoodsList;
 
 GoodsList.defaultProps = {
     goods: [],
