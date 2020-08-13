@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './GoodCategorySelect.css';
 
-
-const GoodCategorySelect = (props) => {
+export default function GoodCategorySelect(props) {
     const {goodsCategory, onInputChange} = props;
     return (
         <select className="GoodCategorySelect">
@@ -24,8 +23,6 @@ const GoodCategorySelect = (props) => {
         </select>
     );
 };
-
-export default GoodCategorySelect;
 
 GoodCategorySelect.propTypes = {
     goodsCategory: PropTypes.array,
