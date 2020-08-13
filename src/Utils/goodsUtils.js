@@ -22,15 +22,15 @@ export const getTotal = (goods) => {
 };
 
 
-export const getToggleElement = (id, goods) => {
-    console.log(goods, id);
-    return goods.map((good) => {
-        if (good.id === id) {
-            good.selected = !good.selected;
-        }
-        return good;
-    });
-};
+// export const getToggleElement = (id, goods) => {
+//     console.log(goods, id);
+//     return goods.map((good) => {
+//         if (good.id === id) {
+//             good.selected = !good.selected;
+//         }
+//         return good;
+//     });
+// };
 
 export const toggleSelectedGood = (selectedGoods, id) => {
     if (selectedGoods.indexOf(id) !== -1) {
@@ -61,12 +61,13 @@ export const getEditElement = (goods, updatedGood ) => {
 };
 
 export const deleteSelectedElements = (goods, selectedGoods) => {
+    const newGoods = [];
     for (let i = 0; i < goods.length; i++) {
-        if (selectedGoods.indexOf(goods[i].id) !== -1) {
-            goods.splice(i, 1);
+        if (selectedGoods.indexOf(goods[i].id) === -1) {
+            newGoods.push(goods[i]);
         }
     }
-    return goods;
+    return newGoods;
 };
 
 export const removeSelectedGoodById = (arr, id) => {
