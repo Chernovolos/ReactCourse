@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, {useCallback, useState} from 'react';
 import './App.css';
-import {goods} from '../Mocks/GoodsMock';
-import {goodsCategory} from '../Mocks/GoodsCategory';
+import {goods as goodsMock} from '../Mocks/GoodsMock';
+import {goodsCategory as goodsCategoryMock} from '../Mocks/GoodsCategory';
 import GoodsList from '../GoodsList/GoodsList';
 import GoodsListForm from '../GoodsListForm/GoodsListForm';
 import {
@@ -16,116 +16,107 @@ import {
 } from '../Utils/goodsUtils';
 import PropTypes from 'prop-types';
 
-export default class App extends Component {
-    state = {
-        goods,
-        goodsCategory,
-        total: getTotal(goods),
-        subtotalElement: 0,
-        selectedGoods: [],
-    };
 
-    recalculateTotal = () => {
-        this.setState((state) => ({
-            ...this.state,
-            total: getTotal(state.goods),
-        }));
-    };
+export default function App() {
+    const [goods, setGoods] = useState(goodsMock);
+    const [goodsCategory, setGoodsCategory] = useState(goodsCategoryMock);
+    const [total, setTotal] = useState(getTotal(goods));
+    const [subtotalElement, setSubtotalElement] = useState(0);
+    const [selectedGoods, setSelectedGoods] = useState([]);
 
-    onAdd = (newElement) => {
-        this.setState(({goods}) => {
+    const onAdd = useCallback(
+        (newElement) => {
             const newArray = addNewItem(newElement, goods);
-            return {
-                ...this.state,
-                goods: newArray,
-                subtotalElement: getSubtotal(newArray, this.state.selectedGoods),
-                total: getTotal(newArray),
-            };
-        });
-    };
+            setGoods(newArray);
+            setSubtotalElement(getSubtotal(newArray, selectedGoods));
+            setTotal(getTotal(newArray));
+        },
+        [goods, selectedGoods],
+    );
 
-    onDelete = (id) => {
-        const newArray = removeElementById(id, this.state.goods);
-        const newSelectedGoods = removeSelectedGoodById(this.state.selectedGoods, id);
-        this.setState({
-            ...this.state,
-            goods: newArray,
-            selectedGoods: newSelectedGoods,
-            subtotalElement: getSubtotal(newArray, newSelectedGoods),
-            total: getTotal(newArray),
-        });
-    };
+    const onDelete = useCallback(
+        (id) => {
+            const newArray = removeElementById(id, goods);
+            const newSelectedGoods = removeSelectedGoodById(selectedGoods, id);
+            console.log('newSelectedGoods:', newSelectedGoods);
+            setGoods(newArray);
+            setSelectedGoods(newSelectedGoods);
+            setSubtotalElement(getSubtotal(newArray, newSelectedGoods));
+            setTotal(getTotal(newArray));
+        },
+        [goods, selectedGoods],
+    );
 
-    onToggle = (id) => {
-        const newSelectedGoods = toggleSelectedGood(this.state.selectedGoods, id);
-        this.setState({
-            ...this.state,
-            selectedGoods: newSelectedGoods,
-            subtotalElement: getSubtotal(this.state.goods, newSelectedGoods),
-        });
-    };
+    const onToggle = useCallback(
+        (id) => {
+            const newSelectedGoods = toggleSelectedGood(selectedGoods, id);
+            setSelectedGoods(newSelectedGoods);
+            setSubtotalElement(getSubtotal(goods, newSelectedGoods));
+        },
+        [goods, selectedGoods],
+    );
 
-    onEdit = (updatedGood) => {
-        const updatedGoods = getEditElement(this.state.goods, updatedGood);
-        this.setState({
-            ...this.state,
-            goods: updatedGoods,
-        });
-    };
+    const onEdit = useCallback(
+        (updatedGood) => {
+            const updatedGoods = getEditElement(goods, updatedGood);
+            setGoods(updatedGoods);
+            setTotal(getTotal(updatedGoods));
+            setSubtotalElement(getSubtotal(goods, updatedGoods));
+        },
+        [goods],
+    );
 
-    onDeleteSelected = () => {
-        const newArray = deleteSelectedElements(this.state.goods, this.state.selectedGoods);
-        this.setState({
-            ...this.state,
-            goods: newArray,
-            selectedGoods: [],
-            subtotalElement: getSubtotal(newArray, []),
-            total: getTotal(newArray),
-        });
-    };
+    const onDeleteSelected = useCallback(
+        () => {
+            const newArray = deleteSelectedElements(goods, selectedGoods);
+            setGoods(newArray);
+            setSelectedGoods([]);
+            setSubtotalElement(getSubtotal(newArray, []));
+            setTotal(getTotal(newArray));
+        },
+        [goods, selectedGoods],
+    );
 
-    render() {
-        const {total, goods, subtotalElement, goodsCategory, selectedGoods} = this.state;
-        return (
-            <div className="container">
-                <div>
-                    <div className="Title">Fridge</div>
-                </div>
-                <section>
-                    <div className="AppWrapper">
-                        <GoodsListForm onAdd={this.onAdd} goodsCategory={goodsCategory}/>
-                        <div className="TotalWrapper">
-                            <div className="Total">
-                                <h3>Subtotal: </h3>
-                                <p className="TotalNumber">{subtotalElement}</p>
-                            </div>
-                            <div className="Total">
-                                <h3>Total: </h3>
-                                <p className="TotalNumber">{total}</p>
-                            </div>
+
+    return (
+        <div className="container">
+            <div>
+                <div className="Title">Fridge</div>
+            </div>
+            <section>
+                <div className="AppWrapper">
+                    <GoodsListForm onAdd={onAdd} goodsCategory={goodsCategory}/>
+                    <div className="TotalWrapper">
+                        <div className="Total">
+                            <h3>Subtotal: </h3>
+                            <p className="TotalNumber">{subtotalElement}</p>
+                        </div>
+                        <div className="Total">
+                            <h3>Total: </h3>
+                            <p className="TotalNumber">{total}</p>
                         </div>
                     </div>
-                    <div className="AppButtonWrapper">
-                        <button
-                            onClick={this.onDeleteSelected}
-                            disabled={!selectedGoods.length}
-                            className="button AppButton"
-                        >
+                </div>
+                <div className="AppButtonWrapper">
+                    <button
+                        onClick={onDeleteSelected}
+                        disabled={!selectedGoods.length}
+                        className="button AppButton"
+                    >
                             delete
-                        </button>
-                    </div>
-                </section>
-                <GoodsList
-                    goods={goods}
-                    selectedGoods={selectedGoods}
-                    onDelete={this.onDelete}
-                    onToggle={this.onToggle}
-                    onEdit={this.onEdit}
-                    onDeleteSelected={this.onDeleteSelected}
-                />
-            </div>
-        );
-    }
+                    </button>
+                </div>
+            </section>
+            <GoodsList
+                goods={goods}
+                selectedGoods={selectedGoods}
+                onDelete={onDelete}
+                onToggle={onToggle}
+                onEdit={onEdit}
+                onDeleteSelected={onDeleteSelected}
+            />
+        </div>
+    );
 }
 
 App.defaultProps = {
