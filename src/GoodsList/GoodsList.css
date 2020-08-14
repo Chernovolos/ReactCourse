@@ -1,17 +1,2 @@
-.GoodListSection {
-    padding-top: 20px;
-}
 
-.GoodListContainer {
-    margin: -16px;
-    font-size: 0;
-}
-
-.GoodsListWrapper {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    padding: 16px;
-    font-size: 16px;
-}
 
