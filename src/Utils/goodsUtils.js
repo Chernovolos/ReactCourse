@@ -33,12 +33,11 @@ export const getTotal = (goods) => {
 // };
 
 export const toggleSelectedGood = (selectedGoods, id) => {
-    if (selectedGoods.indexOf(id) !== -1) {
-        selectedGoods.splice(selectedGoods.indexOf(id), 1);
-    } else {
-        selectedGoods.push(id);
+    const newSelectedGoods = selectedGoods.filter((goodId) => goodId !== id);
+    if (selectedGoods.length === newSelectedGoods.length) {
+        newSelectedGoods.push(id);
     }
-    return selectedGoods;
+    return newSelectedGoods;
 };
 
 export const getSubtotal = (goods, selectedGoods) => {
@@ -50,7 +49,7 @@ export const getSubtotal = (goods, selectedGoods) => {
     }, 0);
 };
 
-export const getEditElement = (goods, updatedGood ) => {
+export const getEditElement = (goods, updatedGood) => {
     return goods.map((good) => {
         if (good.id === updatedGood.id) {
             return updatedGood;
