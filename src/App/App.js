@@ -1,4 +1,5 @@
 import React, {useCallback, useState} from 'react';
+import '../assets/scss/index.scss';
 import './App.css';
 import {goods as goodsMock} from '../Mocks/GoodsMock';
 import {goodsCategory as goodsCategoryMock} from '../Mocks/GoodsCategory';
@@ -15,6 +16,7 @@ import {
     removeSelectedGoodById,
 } from '../Utils/goodsUtils';
 import PropTypes from 'prop-types';
+import {Badge, Button, Col, Container, Navbar, Row} from 'react-bootstrap';
 
 
 export default function App() {
@@ -38,7 +40,6 @@ export default function App() {
         (id) => {
             const newArray = removeElementById(id, goods);
             const newSelectedGoods = removeSelectedGoodById(selectedGoods, id);
-            console.log('newSelectedGoods:', newSelectedGoods);
             setGoods(newArray);
             setSelectedGoods(newSelectedGoods);
             setSubtotalElement(getSubtotal(newArray, newSelectedGoods));
@@ -52,6 +53,7 @@ export default function App() {
             const newSelectedGoods = toggleSelectedGood(selectedGoods, id);
             setSelectedGoods(newSelectedGoods);
             setSubtotalElement(getSubtotal(goods, newSelectedGoods));
+            setTotal(getTotal(goods));
         },
         [goods, selectedGoods],
     );
@@ -77,65 +79,62 @@ export default function App() {
         [goods, selectedGoods],
     );
 
-
     return (
-        <div className="container">
-            <div>
-                <div className="Title">Fridge</div>
-            </div>
-            <section>
-                <div className="AppWrapper">
+        <Container>
+            <Navbar bg='dark' variant='dark' className='mb-5'>
+                <Navbar.Brand>Fridge</Navbar.Brand>
+            </Navbar>
+            <section className='mb-5'>
+                <Row>
                     <GoodsListForm onAdd={onAdd} goodsCategory={goodsCategory}/>
-                    <div className="TotalWrapper">
-                        <div className="Total">
-                            <h3>Subtotal: </h3>
-                            <p className="TotalNumber">{subtotalElement}</p>
-                        </div>
-                        <div className="Total">
-                            <h3>Total: </h3>
-                            <p className="TotalNumber">{total}</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="AppButtonWrapper">
-                    <button
-                        onClick={onDeleteSelected}
-                        disabled={!selectedGoods.length}
-                        className="button AppButton"
-                    >
-                            delete
-                    </button>
-                </div>
+                </Row>
             </section>
-            <GoodsList
-                goods={goods}
-                selectedGoods={selectedGoods}
-                onDelete={onDelete}
-                onToggle={onToggle}
-                onEdit={onEdit}
-                onDeleteSelected={onDeleteSelected}
-            />
-        </div>
+            <section>
+                <Row className='justify-content-md-around'>
+                    <Col className='mb-3'>
+                        <Button
+                            onClick={onDeleteSelected}
+                            disabled={!selectedGoods.length}
+                            size='lg'
+                            variant='danger'
+                            className='mr-3 text-uppercase'
+                        >
+                            delete
+                        </Button>
+                    </Col>
+                    <Col sm={4}>
+                        <h3>Subtotal:
+                            <Badge variant='secondary' className='ml-3'> {subtotalElement}</Badge>
+                        </h3>
+                    </Col>
+                    <Col>
+                        <h3>Total:
+                            <Badge variant='secondary' className='ml-3'> {total}</Badge>
+                        </h3>
+                    </Col>
+                </Row>
+                <Row>
+                    <GoodsList
+                        goods={goods}
+                        selectedGoods={selectedGoods}
+                        onDelete={onDelete}
+                        onToggle={onToggle}
+                        onEdit={onEdit}
+                        onDeleteSelected={onDeleteSelected}
+                    />
+                </Row>
+            </section>
+        </Container>
     );
 }
 
 App.defaultProps = {
     goods: [],
-    selectedElement: [],
-    total: 0,
-    subtotalElement: 0,
     goodsCategory: [],
 };
 
-App.propTypes = {
-    total: PropTypes.number,
-    subtotalElement: PropTypes.number,
+App.prototype = {
     goods: PropTypes.array,
-    selectedGoods: PropTypes.array,
     goodsCategory: PropTypes.array,
-    onAdd: PropTypes.func,
-    onDelete: PropTypes.func,
-    onToggle: PropTypes.func,
-    onEdit: PropTypes.func,
-    onDeleteSelected: PropTypes.func,
 };
+
