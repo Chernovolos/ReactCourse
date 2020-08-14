@@ -1,12 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './GoodCategorySelect.css';
+import {Form} from 'react-bootstrap';
 
 export default function GoodCategorySelect(props) {
     const {goodsCategory, onInputChange} = props;
     return (
-        <select className="GoodCategorySelect">
-            <option>Choose a category</option>
+        <Form.Control
+            as="select"
+            id="inlineFormCustomSelectPref"
+            custom
+        >
+            <option value="name">Choose...</option>
             {
                 goodsCategory.map(({id, name}) => {
                     return (
@@ -20,8 +24,11 @@ export default function GoodCategorySelect(props) {
                     );
                 })
             }
-        </select>
+        </Form.Control>
     );
+};
+GoodCategorySelect.defaultProps = {
+    goodsCategory: [],
 };
 
 GoodCategorySelect.propTypes = {
