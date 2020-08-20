@@ -1,10 +1,9 @@
-import React, {useState, useCallback} from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import {Button, Col, Form, Card} from 'react-bootstrap';
-
+import { Button, Col, Form, Card } from 'react-bootstrap';
 
 export default function GoodsListElement(props) {
-    const {good, isSelected, onDelete, onToggle, onEdit} = props;
+    const { good, isSelected, onDelete, onToggle, onEdit } = props;
 
     const [stateElement, setStateElement] = useState({
         isEditMode: false,
@@ -17,15 +16,15 @@ export default function GoodsListElement(props) {
     const [validated, setValidated] = useState(false);
 
     const handleSubmit = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
         const {title, weight, description} = stateElement;
         const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
+        if (form.checkValidity()) {
+            setValidated(true);
+            onEdit({...good, title, weight, description});
+            onEditCancel();
         }
-        setValidated(true);
-        onEdit({...good, title, weight, description});
-        onEditCancel();
         setValidated(false);
     };
 
@@ -74,7 +73,7 @@ export default function GoodsListElement(props) {
     );
 
     const renderCard = () => {
-        const {title, weight, description} = good;
+        const { title, weight, description } = good;
         return (
             <Card className={ isSelected? 'border border-primary':'border border-dark'}>
                 <Card.Header>

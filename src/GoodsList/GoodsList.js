@@ -1,10 +1,35 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import GoodsListElement from '../GoodsListElement/GoodsListElement';
 import PropTypes from 'prop-types';
+import { deleteItem, editItem, toggleItem } from '../actions/goodsActions';
+import { useDispatch } from "react-redux";
+
 
 const GoodsList = (props) => {
-    const {goods, selectedGoods, onDelete, onToggle, onEdit} = props;
-    const handleToggle = (e) => onToggle(e);
+    const {selectedGoods, goods} = props;
+
+    const dispatch = useDispatch();
+
+    const onDelete = useCallback(
+        (id) => {
+            dispatch(deleteItem(id));
+        },
+        [dispatch],
+    );
+
+    const onToggle = useCallback(
+        (id) => {
+            dispatch(toggleItem(id));
+        },
+        [dispatch],
+    );
+
+    const onEdit = useCallback(
+        (updatedGood) => {
+            dispatch(editItem(updatedGood));
+        },
+        [dispatch],
+    );
 
     return (
         <>
@@ -16,7 +41,7 @@ const GoodsList = (props) => {
                             isSelected={selectedGoods.indexOf(good.id) !== -1}
                             key={good.id}
                             onDelete={onDelete}
-                            onToggle={handleToggle}
+                            onToggle={onToggle}
                             onEdit={onEdit}
                         />
                     );

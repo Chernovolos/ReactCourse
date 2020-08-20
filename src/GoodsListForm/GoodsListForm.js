@@ -3,29 +3,20 @@ import PropTypes from 'prop-types';
 import GoodCategorySelect from '../GoodCategorySelect/GoodCategorySelect';
 import {Button, Col, Form} from 'react-bootstrap';
 
-export default function GoodsListForm(props) {
-    const {onAdd, goodsCategory} = props;
+import { useDispatch} from 'react-redux';
+import {addItem} from '../actions/formActions';
 
+export default function GoodsListForm(props) {
+    const { goodsCategory} = props;
+
+    const dispatch = useDispatch();
+
+    const [validated, setValidated] = useState(false);
     const [stateInput, setStateInput] = useState({
         title: '',
         weight: '',
         description: '',
     });
-
-    const [validated, setValidated] = useState(false);
-
-    // const onFormSubmit = useCallback(
-    //     (e) => {
-    //         e.preventDefault();
-    //         onAdd(stateInput);
-    //         setStateInput({
-    //             title: '',
-    //             weight: '',
-    //             description: '',
-    //         });
-    //     },
-    //     [onAdd, stateInput],
-    // );
 
     const onInputChange = useCallback(
         ({target}) => {
@@ -37,29 +28,25 @@ export default function GoodsListForm(props) {
         [stateInput],
     );
 
-    const onAddGood = useCallback(
-        (e) => {
-            e.preventDefault();
-            onAdd(stateInput);
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const form = event.currentTarget;
+        if (form.checkValidity()) {
+            setValidated(true);
+            dispatch(addItem(stateInput));
             setStateInput({
                 title: '',
                 weight: '',
                 description: '',
             });
-        },
-        [onAdd, stateInput],
-    );
-
-    const handleSubmit = (event) => {
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
         }
-        setValidated(true);
-        onAddGood(event);
-        setValidated(false);
+            setValidated(false);
+
     };
+
 
     const {title, weight, description} = stateInput;
 
